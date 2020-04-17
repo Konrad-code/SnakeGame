@@ -1,40 +1,27 @@
-import javax.swing.*;
-import java.awt.*;
+package com.snake.implementation;
+
+/**
+ * @author Janek Misiórski | https://github.com/janekjmf 	| janekjmf@gmail.com 		| +48 883 483 807
+ */
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * @author Konrad ¯o³yñski | https://github.com/Konrad-code | konrad.zolynski@gmail.com | +48 533 683 168
- *
- * @author Janek Misiórski | https://github.com/janekjmf 	| janekjmf@gmail.com 		| +48 883 483 807
- */
+import javax.swing.JPanel;
 
-public class Main
-{
-    public static void main(String[] args)
-    {
-        JFrame ramka = new JFrame();
-        Okno okno = new Okno();
-
-        ramka.add(okno);
-        ramka.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ramka.setTitle("Zaskroniec");
-        ramka.setResizable(false);
-        ramka.pack();
-        ramka.setLocationRelativeTo(null);
-        ramka.setVisible(true);
-    }
-}
-
-class Okno extends JPanel implements Runnable, KeyListener
-{
-    public static final int szerokosc = 400, wysokosc = 400;
+public class Okno extends JPanel implements Runnable, KeyListener {
+    
+	public static final int szerokosc = 400, wysokosc = 400;
     private Thread thread;
     private boolean dalejPelza = false;
-    private Wonsz wonsz;
-    private ArrayList<Wonsz> snake;
+    private Waz wonsz;
+    private ArrayList<Waz> snake;
     private Jablko jablko;
     private ArrayList<Jablko> jablka;
     private Random random;
@@ -52,25 +39,22 @@ class Okno extends JPanel implements Runnable, KeyListener
     private int czekanie = 70;
     private int stopienSzybkosci = 5;
 
-    public Okno()
-    {
-        setFocusable(true);
+    public Okno() {
+    	setFocusable(true);
         addKeyListener(this);
         setPreferredSize(new Dimension(szerokosc, wysokosc));
         random = new Random();
-        snake = new ArrayList<Wonsz>();
+        snake = new ArrayList<Waz>();
         jablka = new ArrayList<Jablko>();
         start();
     }
 
-    public void paint(Graphics g)
-    {
+    public void paint(Graphics g) {
         g.clearRect(0, 0, szerokosc, szerokosc);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, szerokosc, szerokosc);
 
-        for (int i = 0; i < snake.size(); i++)
-        {
+        for (int i = 0; i < snake.size(); i++)  {
             if (i == snake.size()-1)
                 snake.get(i).draw(g, 1600);
             else
@@ -89,8 +73,7 @@ class Okno extends JPanel implements Runnable, KeyListener
         Font font3 = new Font("Arial Black", Font.ITALIC, 40);
         g.setFont(font2);
 
-        if (info)
-        {
+        if (info) {
             g.setColor(Color.RED);
             g.fillRect(7, 30, 70, 15);//X Wê¿a
             g.fillRect(7, 50, 70, 15);//Y Wê¿a
@@ -118,8 +101,7 @@ class Okno extends JPanel implements Runnable, KeyListener
             g.drawString("\" X \" -  Zwiêksz prêdkoœæ wê¿a", 10, 260);
         }
 
-        if (pauza)
-        {
+        if (pauza) {
             g.setFont(font3);
             g.setColor(Color.RED);
             g.fillRect(137, 153, 140, 50);
@@ -129,8 +111,7 @@ class Okno extends JPanel implements Runnable, KeyListener
             g.setFont(font2);
         }
 
-        if (!dalejPelza)
-        {
+        if (!dalejPelza) {
             g.setFont(font3);
             g.setColor(Color.RED);
             g.fillRect(100, 253, 235, 50);
@@ -141,32 +122,26 @@ class Okno extends JPanel implements Runnable, KeyListener
         }
     }
 
-    public void start()
-    {
+    public void start() {
         dalejPelza = true;
         thread = new Thread(this);
         thread.start();
     }
 
-    public void stop()
-    {
-        dalejPelza = false;
+    public void stop() {
+    	dalejPelza = false;
         try {thread.join();} catch (InterruptedException e){e.printStackTrace();}
     }
 
-    public void run()
-    {
-        while (dalejPelza)
-        {
-            if(!pauza)
-            {
-                if (snake.size() == 0)
-                {
-                    wonsz = new Wonsz(X, Y, 10);
+    public void run() {
+    	
+        while (dalejPelza) {
+            if(!pauza) {
+                if (snake.size() == 0) {
+                    wonsz = new Waz(X, Y, 10);
                     snake.add(wonsz);
                 }
-                if(jablka.size() == 0)
-                {
+                if(jablka.size() == 0) {
                     int xJablka = random.nextInt(39);
                     int yJablka = random.nextInt(39);
 
@@ -174,8 +149,7 @@ class Okno extends JPanel implements Runnable, KeyListener
                     jablka.add(jablko);
                 }
 
-                for(int i = 0; i < jablka.size(); i++)
-                {
+                for(int i = 0; i < jablka.size(); i++) {
                     if(X == jablka.get(i).getX() && Y == jablka.get(i).getY())
                     {
                         size++;
@@ -184,17 +158,14 @@ class Okno extends JPanel implements Runnable, KeyListener
                     }
                 }
 
-                for(int i =0; i < snake.size(); i++)
-                {
-                    if(X == snake.get(i).getX() && Y == snake.get(i).getY())
-                    {
+                for(int i =0; i < snake.size(); i++) {
+                    if(X == snake.get(i).getX() && Y == snake.get(i).getY()) {
                         if(i != snake.size() - 1)
                             stop();
                     }
                 }
 
-                if(przechodzeniePrzezScany)
-                {
+                if(przechodzeniePrzezScany) {
                     if (X < 0)
                         X = 39;
                     if (X > 39)
@@ -204,8 +175,7 @@ class Okno extends JPanel implements Runnable, KeyListener
                     if (Y > 39)
                         Y = 0;
                 }
-                else
-                {
+                else {
                     if (X < 0 || X > 39 || Y < 0 || Y > 39)
                         stop();
                 }
@@ -219,7 +189,7 @@ class Okno extends JPanel implements Runnable, KeyListener
                 if(dol)
                     Y++;
 
-                wonsz = new Wonsz(X, Y, 10);
+                wonsz = new Waz(X, Y, 10);
                 snake.add(wonsz);
 
                 if(snake.size() > size)
@@ -232,140 +202,65 @@ class Okno extends JPanel implements Runnable, KeyListener
     }
 
     @Override
-    public void keyPressed(KeyEvent e)
-    {
+    public void keyPressed(KeyEvent e) {
         int wcisniety = e.getKeyCode();
 
-        if(wcisniety == KeyEvent.VK_RIGHT && !lewo)
-        {
+        if(wcisniety == KeyEvent.VK_RIGHT && !lewo) {
             gora = false;
             dol = false;
             prawo = true;
         }
 
-        if(wcisniety == KeyEvent.VK_LEFT && !prawo)
-        {
+        if(wcisniety == KeyEvent.VK_LEFT && !prawo) {
             gora = false;
             dol = false;
             lewo = true;
         }
 
-        if(wcisniety == KeyEvent.VK_UP && !dol)
-        {
+        if(wcisniety == KeyEvent.VK_UP && !dol) {
             lewo = false;
             prawo = false;
             gora = true;
         }
 
-        if(wcisniety == KeyEvent.VK_DOWN && !gora)
-        {
+        if(wcisniety == KeyEvent.VK_DOWN && !gora) {
             lewo = false;
             prawo = false;
             dol = true;
         }
-        if (wcisniety == KeyEvent.VK_I)
-        {
+        if (wcisniety == KeyEvent.VK_I) {
             if (info)
                 info = false;
             else
                 info = true;
         }
 
-        if(wcisniety == KeyEvent.VK_O && info)
-        {
+        if(wcisniety == KeyEvent.VK_O && info) {
             if (przechodzeniePrzezScany)
                 przechodzeniePrzezScany = false;
             else
                 przechodzeniePrzezScany = true;
         }
 
-        if(wcisniety == KeyEvent.VK_ESCAPE)
-        {
+        if(wcisniety == KeyEvent.VK_ESCAPE) {
             if (pauza)
                 pauza = false;
             else
                 pauza = true;
         }
 
-        if(wcisniety == KeyEvent.VK_X && stopienSzybkosci > 0 && stopienSzybkosci <= 10)
-        {
+        if(wcisniety == KeyEvent.VK_X && stopienSzybkosci > 0 && stopienSzybkosci <= 10) {
             czekanie += 10;
             stopienSzybkosci--;
         }
 
-        if(wcisniety == KeyEvent.VK_Z && stopienSzybkosci >= 0 && stopienSzybkosci < 10)
-        {
+        if(wcisniety == KeyEvent.VK_Z && stopienSzybkosci >= 0 && stopienSzybkosci < 10) {
             czekanie -= 10;
             stopienSzybkosci++;
         }
     }
+    
     @Override
     public void keyReleased(KeyEvent arg0) {}
     public void keyTyped(KeyEvent arg0) {}
-}
-
-class Wonsz
-{
-    private int x;
-    private int y;
-    private int szerokosc;
-    private int wysokosc;
-
-    public Wonsz(int x, int y, int rozmiar)
-    {
-        this.x = x;
-        this.y = y;
-        this.szerokosc = rozmiar;
-        this.wysokosc = rozmiar;
-    }
-
-    public void draw(Graphics g, int index)
-    {
-        if (index == 1600)
-            g.setColor(new Color(232, 232, 0));
-        else if (index % 2 == 0)
-            g.setColor(Color.BLACK);
-        else if (index % 2 != 0)
-            g.setColor(new Color(75, 75, 75));
-
-        g.fillRect(x * szerokosc, y * wysokosc, szerokosc, wysokosc);
-    }
-    public int getX() {return x;}
-    public void setX(int x) {this.x = x;}
-    public int getY() {return y;}
-    public void setY(int y) {this.y = y;}
-    public int getWysokosc() {return wysokosc;}
-    public void setWysokosc(int wysokosc) {this.wysokosc = wysokosc;}
-    public int getSzerokosc() {return szerokosc;}
-    public void setSzerokosc(int szerokosc) {this.szerokosc = szerokosc;}
-}
-
-class Jablko
-{
-    private int x;
-    private int y;
-    private int szerokosc;
-    private int wysokosc;
-
-    public Jablko(int x, int y, int rozmiar)
-    {
-        this.x = x;
-        this.y = y;
-        this.szerokosc = rozmiar;
-        this.wysokosc = rozmiar;
-    }
-
-    public void draw(Graphics g)
-    {
-        g.setColor(Color.RED);
-        g.fillOval(x * szerokosc, y * wysokosc, szerokosc, wysokosc);
-    }
-    public int getX() {return x;}
-    public void setX(int x) {this.x = x;}
-    public int getY() {return y;}
-    public void setY(int y) {this.y = y;}
-    public int getWysokosc() {return wysokosc;}
-    public void setWysokosc(int wysokosc) {this.wysokosc = wysokosc;}
-    public int getSzerokosc() {return szerokosc;}
-    public void setSzerokosc(int szerokosc) {this.szerokosc = szerokosc;}
 }
