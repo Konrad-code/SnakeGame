@@ -22,7 +22,7 @@ public class Jablko {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.RED);
+        g.setColor(new Color (133, 107, 88));
         g.fillOval(x * szerokosc, y * wysokosc, szerokosc, wysokosc);
     }
 
