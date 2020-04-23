@@ -1,0 +1,770 @@
+package com.snake.gui;
+
+/**
+ * @author Konrad ¯o³yñski | https://github.com/Konrad-code | konrad.zolynski@gmail.com | +48 533 683 168
+**/
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import javax.sound.sampled.Clip;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.border.Border;
+
+import com.snake.implementation.CRUD;
+import com.snake.implementation.Music;
+import com.snake.implementation.PlayerDAO;
+
+public class LoginFrame extends javax.swing.JFrame implements WindowListener {
+
+    private PlayerDAO player;
+    private final Color color = new Color(255, 128, 62);
+    private final Color color2 = new Color(255, 128, 28);
+    private final Color color3 = new Color(150, 150, 150);
+    private final Color color4 = new Color(244, 166, 152);
+    private Clip music = null;
+    private ImageIcon gameIcon;
+    private boolean ifTableExists = false;
+    private boolean doesMusicPlay = true;
+    
+    public LoginFrame(boolean doesMusicPlay) {
+        initComponents();
+        player = new PlayerDAO();
+        this.doesMusicPlay = doesMusicPlay;
+        this.setLocationRelativeTo(null);
+        this.addWindowListener(this);
+        
+        if(CRUD.checkIfTableExistsInDatabase())
+            ifTableExists = true;
+        if(!ifTableExists){
+            button_showRank.setEnabled(false);
+            button_register.setEnabled(false);
+        }
+        if(!player.getGameSettings().isIfMusic()) {
+        	label_play.setEnabled(false);
+        	label_stop.setEnabled(false);
+        	doesMusicPlay = false;
+        }
+        	
+        gameIcon = new ImageIcon("img\\snake_min.png");
+        setIconImage(gameIcon.getImage());
+        Border border_panel_title = BorderFactory.createMatteBorder(0, 3, 3, 3, new Color(221, 97, 74));
+        panel_title.setBorder(border_panel_title);
+        Border border = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK);
+        label_close.setBorder(border);
+        label_minimize.setBorder(border);
+        button_login.setFocusPainted(false);
+
+        Border border_button = BorderFactory.createMatteBorder(3, 3, 3, 3, new Color(221, 97, 74));
+        button_login.setBorder(border_button);
+        button_register.setBorder(border_button);
+        button_quickPlay.setBorder(border_button);
+        button_gameSettings.setBorder(border_button);
+        button_showRank.setBorder(border_button);
+        
+        Border border_fields = BorderFactory.createMatteBorder(3, 3, 3, 3, new Color(255,234,238));
+        field_user.setBorder(border_fields);
+        field_password.setBorder(border_fields);
+
+        Music playMusic = new Music();
+        music = playMusic.playMusic();
+        if(!doesMusicPlay || !player.getGameSettings().isIfMusic()){
+            music.stop();
+        }
+    }
+    
+    public LoginFrame(PlayerDAO player, Clip music, boolean doesMusicPlay) {
+        initComponents();
+        this.music = music;
+        this.doesMusicPlay = doesMusicPlay;
+        this.player = player;
+        this.addWindowListener(this);
+        this.setLocationRelativeTo(null);
+
+        if(CRUD.checkIfTableExistsInDatabase())
+            ifTableExists = true;
+        if(!ifTableExists){
+            button_showRank.setEnabled(false);
+            button_register.setEnabled(false);
+        }
+        if(!player.getGameSettings().isIfMusic()) {
+        	label_play.setEnabled(false);
+        	label_stop.setEnabled(false);
+        	doesMusicPlay = false;
+        }
+
+        gameIcon = new ImageIcon("img\\snake_min.png");
+    	setIconImage(gameIcon.getImage());
+        Border border_panel_title = BorderFactory.createMatteBorder(0, 3, 3, 3, new Color(221, 97, 74));
+        panel_title.setBorder(border_panel_title);
+        Border border = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK);
+        label_close.setBorder(border);
+        label_minimize.setBorder(border);
+        button_login.setFocusPainted(false);
+
+        Border border_button = BorderFactory.createMatteBorder(3, 3, 3, 3, new Color(221, 97, 74));
+        button_login.setBorder(border_button);
+        button_register.setBorder(border_button);
+        button_quickPlay.setBorder(border_button);
+        button_gameSettings.setBorder(border_button);
+        button_showRank.setBorder(border_button);
+        
+        Border border_fields = BorderFactory.createMatteBorder(3, 3, 3, 3, new Color(255,234,238));
+        field_user.setBorder(border_fields);
+        field_password.setBorder(border_fields);
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        lab_iconSnake = new javax.swing.JLabel();
+        label_play = new javax.swing.JLabel();
+        label_stop = new javax.swing.JLabel();
+        button_login = new javax.swing.JButton();
+        label_password = new javax.swing.JLabel();
+        label_user = new javax.swing.JLabel();
+        field_password = new javax.swing.JPasswordField();
+        field_user = new javax.swing.JTextField();
+        button_register = new javax.swing.JButton();
+        button_quickPlay = new javax.swing.JButton();
+        button_gameSettings = new javax.swing.JButton();
+        button_showRank = new javax.swing.JButton();
+        label_minimize = new javax.swing.JLabel();
+        label_close = new javax.swing.JLabel();
+        panel_title = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(221, 97, 74));
+
+        jPanel2.setBackground(new java.awt.Color(244, 134, 104));
+
+        jPanel3.setBackground(new java.awt.Color(244, 166, 152));
+
+        lab_iconSnake.setBackground(new java.awt.Color(221, 97, 74));
+        lab_iconSnake.setOpaque(false);
+
+        label_play.setBackground(new java.awt.Color(221, 97, 74));
+        label_play.setText("jLabel1");
+        label_play.setOpaque(false);
+        label_play.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                label_playMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                label_playMouseReleased(evt);
+            }
+        });
+
+        label_stop.setBackground(new java.awt.Color(221, 97, 74));
+        label_stop.setText("jLabel1");
+        label_stop.setOpaque(false);
+        label_stop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                label_stopMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                label_stopMouseReleased(evt);
+            }
+        });
+
+        button_login.setBackground(new java.awt.Color(255, 128, 62));
+        button_login.setFont(new java.awt.Font("Franklin Gothic Book", 1, 30)); // NOI18N
+        button_login.setForeground(new java.awt.Color(255, 255, 255));
+        button_login.setText("Login");
+        button_login.setBorder(null);
+        button_login.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        button_login.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        button_login.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button_loginMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button_loginMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                button_loginMouseReleased(evt);
+            }
+        });
+        button_login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_loginActionPerformed(evt);
+            }
+        });
+
+        label_password.setBackground(new java.awt.Color(221, 97, 74));
+        label_password.setText("jLabel1");
+        label_password.setOpaque(false);
+
+        label_user.setBackground(new java.awt.Color(221, 97, 74));
+        label_user.setText("jLabel1");
+        label_user.setOpaque(false);
+
+        field_password.setBackground(new java.awt.Color(255, 234, 238));
+        field_password.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        field_password.setForeground(new java.awt.Color(153, 153, 153));
+        field_password.setText("passwor");
+        field_password.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                field_passwordFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                field_passwordFocusLost(evt);
+            }
+        });
+
+        field_user.setBackground(new java.awt.Color(255, 234, 238));
+        field_user.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        field_user.setForeground(new java.awt.Color(153, 153, 153));
+        field_user.setText("username");
+        field_user.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                field_userFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                field_userFocusLost(evt);
+            }
+        });
+
+        button_register.setBackground(new java.awt.Color(255, 128, 62));
+        button_register.setFont(new java.awt.Font("Franklin Gothic Book", 1, 30)); // NOI18N
+        button_register.setForeground(new java.awt.Color(255, 255, 255));
+        button_register.setText("Register");
+        button_register.setBorder(null);
+        button_register.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        button_register.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        button_register.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button_registerMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button_registerMouseExited(evt);
+            }
+        });
+        button_register.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_registerActionPerformed(evt);
+            }
+        });
+
+        button_quickPlay.setBackground(new java.awt.Color(255, 128, 62));
+        button_quickPlay.setFont(new java.awt.Font("Franklin Gothic Book", 1, 30)); // NOI18N
+        button_quickPlay.setForeground(new java.awt.Color(255, 255, 255));
+        button_quickPlay.setText("Quick Play");
+        button_quickPlay.setBorder(null);
+        button_quickPlay.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        button_quickPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        button_quickPlay.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button_quickPlayMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button_quickPlayMouseExited(evt);
+            }
+        });
+        button_quickPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_quickPlayActionPerformed(evt);
+            }
+        });
+
+        button_gameSettings.setBackground(new java.awt.Color(255, 128, 62));
+        button_gameSettings.setFont(new java.awt.Font("Franklin Gothic Book", 1, 30)); // NOI18N
+        button_gameSettings.setForeground(new java.awt.Color(255, 255, 255));
+        button_gameSettings.setText("Game Settings");
+        button_gameSettings.setBorder(null);
+        button_gameSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        button_gameSettings.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        button_gameSettings.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button_gameSettingsMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button_gameSettingsMouseExited(evt);
+            }
+        });
+        button_gameSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_gameSettingsActionPerformed(evt);
+            }
+        });
+
+        button_showRank.setBackground(new java.awt.Color(255, 128, 62));
+        button_showRank.setFont(new java.awt.Font("Franklin Gothic Book", 1, 30)); // NOI18N
+        button_showRank.setForeground(new java.awt.Color(255, 255, 255));
+        button_showRank.setText("Show Rank");
+        button_showRank.setBorder(null);
+        button_showRank.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        button_showRank.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        button_showRank.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button_showRankMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button_showRankMouseExited(evt);
+            }
+        });
+        button_showRank.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_showRankActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_user, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_password, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(lab_iconSnake, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(135, 135, 135)
+                        .addComponent(label_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(field_user, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(button_login, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(field_password, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(button_register, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(button_quickPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(button_gameSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(button_showRank, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(67, 67, 67)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(label_play, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label_user, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(field_user, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_password, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(field_password, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addComponent(button_login, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(button_register, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(button_quickPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(button_gameSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(button_showRank, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lab_iconSnake, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(label_play, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(label_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+
+        label_minimize.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        label_minimize.setText(" -");
+        label_minimize.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+        label_minimize.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                label_minimizeMouseClicked(evt);
+            }
+        });
+
+        label_close.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        label_close.setText(" X");
+        label_close.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+        label_close.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                label_closeMouseClicked(evt);
+            }
+        });
+        
+        lab_iconSnake.setIcon(new ImageIcon(getClass().getResource("/snake_min.png")));
+        label_stop.setIcon(new ImageIcon(getClass().getResource("/stop.png")));
+        label_password.setIcon(new ImageIcon(getClass().getResource("/key.png")));
+        label_user.setIcon(new ImageIcon(getClass().getResource("/user.png")));
+        label_play.setIcon(new ImageIcon(getClass().getResource("/play.png")));
+        
+        
+        panel_title.setBackground(new java.awt.Color(183, 80, 61));
+
+        jLabel3.setFont(new java.awt.Font("Franklin Gothic Book", 1, 65)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Login");
+
+        javax.swing.GroupLayout panel_titleLayout = new javax.swing.GroupLayout(panel_title);
+        panel_title.setLayout(panel_titleLayout);
+        panel_titleLayout.setHorizontalGroup(
+            panel_titleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_titleLayout.createSequentialGroup()
+                .addContainerGap(65, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(58, 58, 58))
+        );
+        panel_titleLayout.setVerticalGroup(
+            panel_titleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_titleLayout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panel_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55)
+                .addComponent(label_minimize, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(label_close, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(label_minimize, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label_close, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(panel_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    // AFTER
+    private void button_loginActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        boolean ifDataCorrect = false;
+        System.out.println("Login button pushed");
+        String usernameProvided = field_user.getText();
+        String passwordProvided = String.valueOf(field_password.getPassword());
+        boolean ifLoggedSuccessfully = false;
+
+        if((usernameProvided.length() >= 4 && usernameProvided.length() <= 30) && (passwordProvided.length() >= 4 && passwordProvided.length() <= 30))
+            ifDataCorrect = true;
+        else
+            JOptionPane.showMessageDialog(null, "Provided data incorrect. Login and password have to consist of between 4 and 30 characters");
+        
+        if((!ifTableExists) && ifDataCorrect){
+        	Properties properties = new Properties();
+        	String loginAdmin = "", passwordAdmin = "";
+        	
+        	try {
+    			properties.load(new FileInputStream("sql\\admin_credentials"));
+    			loginAdmin = properties.getProperty("adminLogin");
+    			passwordAdmin = properties.getProperty("adminPassword");
+    		} catch (FileNotFoundException e) {
+    			System.err.println("Could not find Admin Configuration File under specified path: " + e.getMessage());
+    		} catch (IOException e) {
+    			System.err.println("Loading File failed: " + e.getMessage());
+    		}
+        	
+            if(usernameProvided.equals(loginAdmin) && passwordProvided.equals(passwordAdmin)){
+                player = new PlayerDAO(true);
+                JOptionPane.showMessageDialog(null, "Administrator has been logged successfully!");
+                GameSettingsFrame frame = new GameSettingsFrame(player, music, doesMusicPlay);
+                frame.setVisible(true);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                this.dispose();
+            }
+        }
+        
+        if(ifTableExists && ifDataCorrect){
+            ifLoggedSuccessfully = player.tryLogin(usernameProvided, passwordProvided);
+            System.out.println(ifLoggedSuccessfully);
+            if(ifLoggedSuccessfully){
+                JOptionPane.showMessageDialog(null, "You've been logged successfully!", "Welcome " + player.getPlayerNickname(), 2);
+                GameSettingsFrame frame = new GameSettingsFrame(player, music, doesMusicPlay);
+                frame.setVisible(true);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                this.dispose();
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Incorrect data provided in USERNAME and PASSWORD fields", "Failed to login", 2);
+        } else
+            JOptionPane.showMessageDialog(null, "User doesn't exist", "Database empty", 2);
+    }                                            
+
+    private void button_loginMouseEntered(java.awt.event.MouseEvent evt) {                                          
+        button_login.setBackground(color2);
+        button_login.setForeground(color4);
+    }                                         
+
+    private void button_loginMouseExited(java.awt.event.MouseEvent evt) {                                         
+        button_login.setBackground(color);
+        button_login.setForeground(Color.WHITE);
+    }
+
+    private void label_stopMouseClicked(java.awt.event.MouseEvent evt) {                                        
+        
+    }                                       
+
+    private void label_playMouseClicked(java.awt.event.MouseEvent evt) {                                        
+        
+    }                                       
+
+    private void field_userFocusGained(java.awt.event.FocusEvent evt) {                                       
+        if(field_user.getText().trim().toLowerCase().equals("username")) {
+            field_user.setText("");
+            field_user.setForeground(Color.BLACK);
+        }
+    }                                      
+
+    private void field_userFocusLost(java.awt.event.FocusEvent evt) {                                     
+        if(field_user.getText().trim().toLowerCase().equals("username") || field_user.getText().trim().toLowerCase().equals("")) {
+            field_user.setText("username");
+            field_user.setForeground(color3);
+        }
+    }                                    
+
+    private void field_passwordFocusGained(java.awt.event.FocusEvent evt) {                                           
+        String password = String.valueOf(field_password.getPassword());
+        if(password.trim().toLowerCase().equals("passwor")) {
+            field_password.setText("");
+            field_password.setForeground(Color.BLACK);
+        }
+    }                                          
+
+    private void field_passwordFocusLost(java.awt.event.FocusEvent evt) {                                         
+        String password = String.valueOf(field_password.getPassword());
+        if(password.trim().toLowerCase().equals("passwor") || password.trim().toLowerCase().equals("")) {
+            field_password.setText("passwor");
+            field_password.setForeground(color3);
+        }
+    }                                        
+
+    private void label_minimizeMouseClicked(java.awt.event.MouseEvent evt) {                                            
+        this.setState(JFrame.ICONIFIED);
+    }                                           
+
+    private void label_closeMouseClicked(java.awt.event.MouseEvent evt) {                                         
+        System.exit(0);
+    }                                        
+
+    private void label_stopMouseReleased(java.awt.event.MouseEvent evt) {                                         
+        if(music.isRunning() && player.getGameSettings().isIfMusic()){
+            doesMusicPlay = false;
+            music.stop();
+        }
+    }                                        
+
+    private void label_playMouseReleased(java.awt.event.MouseEvent evt) {                                         
+        if(!music.isRunning() && player.getGameSettings().isIfMusic()){
+            doesMusicPlay = true;
+            music.start();
+        }
+    }                                        
+
+    private void button_registerMouseEntered(java.awt.event.MouseEvent evt) {                                             
+        button_register.setBackground(color2);
+        button_register.setForeground(color4);
+    }                                            
+
+    private void button_registerMouseExited(java.awt.event.MouseEvent evt) {                                            
+        button_register.setBackground(color);
+        button_register.setForeground(Color.WHITE);
+    }                                           
+
+    private void button_registerActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        System.out.println("Register button pushed");
+        RegisterFrame frame = new RegisterFrame(player, music, doesMusicPlay);
+        frame.setVisible(true);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        this.dispose();
+    }                                               
+
+    private void button_quickPlayMouseEntered(java.awt.event.MouseEvent evt) {                                              
+        button_quickPlay.setBackground(color2);
+        button_quickPlay.setForeground(color4);
+    }                                             
+
+    private void button_quickPlayMouseExited(java.awt.event.MouseEvent evt) {                                             
+        button_quickPlay.setBackground(color);
+        button_quickPlay.setForeground(Color.WHITE);
+    }                                            
+
+    private void button_quickPlayActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+        System.out.println("Quick play button pushed");
+        GameFrame frame = new GameFrame(player, music, doesMusicPlay);
+        frame.setVisible(true);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        this.dispose();
+    }                                                
+
+    private void button_gameSettingsMouseEntered(java.awt.event.MouseEvent evt) {                                                 
+        button_gameSettings.setBackground(color2);
+        button_gameSettings.setForeground(color4);
+    }                                                
+
+    private void button_gameSettingsMouseExited(java.awt.event.MouseEvent evt) {                                                
+        button_gameSettings.setBackground(color);
+        button_gameSettings.setForeground(Color.WHITE);
+    }                                               
+
+    private void button_gameSettingsActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+        System.out.println("Game settings button pushed");
+        GameSettingsFrame frame = new GameSettingsFrame(player, music, doesMusicPlay);
+        frame.setVisible(true);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        this.dispose();
+    }                                                   
+
+    private void button_showRankMouseEntered(java.awt.event.MouseEvent evt) {                                             
+        button_showRank.setBackground(color2);
+        button_showRank.setForeground(color4);
+    }                                            
+
+    private void button_showRankMouseExited(java.awt.event.MouseEvent evt) {                                            
+        button_showRank.setBackground(color);
+        button_showRank.setForeground(Color.WHITE);
+    }                                           
+
+    private void button_showRankActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        System.out.println("Show rank button pushed");
+        RankingFrame frame = new RankingFrame(player, music, doesMusicPlay);
+        frame.setVisible(true);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        this.dispose();
+    }                                               
+
+    private void button_loginMouseReleased(java.awt.event.MouseEvent evt) {                                           
+    }                                          
+      
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton button_gameSettings;
+    private javax.swing.JButton button_login;
+    private javax.swing.JButton button_quickPlay;
+    private javax.swing.JButton button_register;
+    private javax.swing.JButton button_showRank;
+    private javax.swing.JPasswordField field_password;
+    private javax.swing.JTextField field_user;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lab_iconSnake;
+    private javax.swing.JLabel label_close;
+    private javax.swing.JLabel label_minimize;
+    private javax.swing.JLabel label_password;
+    private javax.swing.JLabel label_play;
+    private javax.swing.JLabel label_stop;
+    private javax.swing.JLabel label_user;
+    private javax.swing.JPanel panel_title;
+    // End of variables declaration                   
+
+    @Override
+    public void windowOpened(WindowEvent e) {}
+    @Override
+    public void windowClosing(WindowEvent e) {}
+    @Override
+    public void windowClosed(WindowEvent e) {}
+    @Override
+    public void windowActivated(WindowEvent e) {}
+    @Override
+    public void windowDeactivated(WindowEvent e) {}
+    
+    @Override
+    public void windowIconified(WindowEvent e) {
+        if(music.isRunning() && player.getGameSettings().isIfMusic()){
+            music.stop();
+            System.out.println("Music stopped");
+        }
+        System.out.println("Window iconified");
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        if(!music.isRunning() && doesMusicPlay && player.getGameSettings().isIfMusic()){
+            music.start();
+            System.out.println("Music is back");
+        }
+        System.out.println("Window deiconified");
+    }
+    
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					LoginFrame frame = new LoginFrame(true);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+}
+
