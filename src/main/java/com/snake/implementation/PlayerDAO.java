@@ -39,6 +39,10 @@ public class PlayerDAO extends CRUD implements IPlayerDAO {
 		setIfPlayerRoot(ifPlayerRoot);
 	}
 	
+	public void setPreparingProceduresInDatabase(StoredProcedures preparingProceduresInDatabase) {
+		this.preparingProceduresInDatabase = preparingProceduresInDatabase;
+	}
+
 	public StoredProcedures getPreparingProceduresInDatabase() {
 		return preparingProceduresInDatabase;
 	}

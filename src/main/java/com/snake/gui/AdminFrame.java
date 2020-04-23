@@ -5,6 +5,8 @@ package com.snake.gui;
 **/
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
@@ -19,6 +21,8 @@ import com.snake.implementation.CRUD;
 import com.snake.implementation.Player;
 import com.snake.implementation.PlayerDAO;
 import com.snake.implementation.PlayerTableModel;
+import com.snake.implementation.StoredProcedures;
+
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -42,14 +46,20 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
         this.setLocationRelativeTo(null);
         this.addWindowListener(this);
         this.player = player;
-
+        button_loadCommands.setEnabled(true);
+        
         if(CRUD.checkIfTableExistsInDatabase())
             ifTableExists = true;
-        if(!ifTableExists){
-        	// TODO
-//            button_showRank.setEnabled(false);
-//            button_register.setEnabled(false);
-//            button_logout.setEnabled(false);
+        if(player.getPreparingProceduresInDatabase() != null && !button_dropTable.isEnabled())
+        	button_createTable.setEnabled(true);
+        if(ifTableExists){
+            button_clearRank.setEnabled(true);
+            button_delete.setEnabled(true);
+            button_deletePlayers.setEnabled(true);
+            button_createTable.setEnabled(false);
+            button_dropTable.setEnabled(true);
+            button_edit.setEnabled(true);
+            button_search.setEnabled(true);
         }
         if(!player.getGameSettings().isIfMusic()) {
         	label_play.setEnabled(false);
@@ -454,6 +464,17 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
         jPanel3.setLayout(jPanel3Layout);
 
         lab_iconSnake.setIcon(new ImageIcon(getClass().getResource("/snake_min.png")));
+        lab_iconSnake.addMouseListener(new MouseAdapter() {  
+            public void mouseClicked(MouseEvent e) {  
+            	System.out.println("Magic snake moves you to Login menu");
+                LoginFrame frame = new LoginFrame(player, music, doesMusicPlay);
+                frame.setVisible(true);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                dispose();
+            }  
+        }); 
+        
         label_stop.setIcon(new ImageIcon(getClass().getResource("/stop.png")));
         label_play.setIcon(new ImageIcon(getClass().getResource("/play.png")));
         
@@ -555,12 +576,8 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
 
     // AFTER
     private void button_deletePlayersActionPerformed(java.awt.event.ActionEvent evt) {                                                     
-        System.out.println("Logout button pushed");
-        LoginFrame frame = new LoginFrame(doesMusicPlay);
-        frame.setVisible(true);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        this.dispose();
+    	System.out.println("Delete all players button pushed");
+        player.deletePlayers();
     }                                                    
 
     private void button_deletePlayersMouseEntered(java.awt.event.MouseEvent evt) {                                                  
@@ -614,12 +631,14 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
     }                                               
 
     private void button_loadCommandsActionPerformed(java.awt.event.ActionEvent evt) {                                                    
-        System.out.println("Quick play button pushed");
-        GameFrame frame = new GameFrame(player, music, doesMusicPlay);
-        frame.setVisible(true);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        this.dispose();
+        System.out.println("Load commands button pushed");
+        if(player.getPreparingProceduresInDatabase() != null)
+        	System.out.println("Already loaded");
+        else {
+        	player.setPreparingProceduresInDatabase(StoredProcedures.getInstance());
+        	if(player.getPreparingProceduresInDatabase() != null)
+        		button_createTable.setEnabled(true);
+        }
     }                                                   
 
     private void button_dropTableMouseEntered(java.awt.event.MouseEvent evt) {                                              
@@ -633,13 +652,20 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
     }                                            
 
     private void button_dropTableActionPerformed(java.awt.event.ActionEvent evt) {                                                 
-        System.out.println("Game settings button pushed");
-        // TODO - ALDS
-//        gameSettingsFrame frame = new gameSettingsFrame(player, music, doesMusicPlay);
-//                frame.setVisible(true);
-//                frame.pack();
-//                frame.setLocationRelativeTo(null);
-//                this.dispose();
+        System.out.println("Drop table button pushed");
+        player.dropTable();
+        if(!CRUD.checkIfTableExistsInDatabase()) {
+            ifTableExists = false;
+            button_clearRank.setEnabled(false);
+            button_delete.setEnabled(false);
+            button_deletePlayers.setEnabled(false);
+            button_createTable.setEnabled(true);
+            button_dropTable.setEnabled(false);
+            button_edit.setEnabled(false);
+            button_search.setEnabled(false);
+        }
+        else
+        	System.out.println("Failed to drop table");
     }                                                
 
     private void button_createTableMouseEntered(java.awt.event.MouseEvent evt) {                                                
@@ -653,7 +679,20 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
     }                                              
 
     private void button_createTableActionPerformed(java.awt.event.ActionEvent evt) {                                                   
-        System.exit(0);
+    	System.out.println("Trying to create table");
+    	player.createTable();
+    	if(CRUD.checkIfTableExistsInDatabase()) {
+            ifTableExists = true;
+            button_clearRank.setEnabled(true);
+            button_delete.setEnabled(true);
+            button_deletePlayers.setEnabled(true);
+            button_createTable.setEnabled(false);
+            button_dropTable.setEnabled(true);
+            button_edit.setEnabled(true);
+            button_search.setEnabled(true);
+        }
+        else
+        	System.out.println("Failed to create table");
     }                                                  
 
     private void button_deletePlayersMouseReleased(java.awt.event.MouseEvent evt) {                                                   
@@ -717,7 +756,8 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
     }                                         
 
     private void button_deleteActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+    	String nickToDelete = field_nick.getText();
+    	player.deletePlayer(nickToDelete);
     }                                             
 
     private void field_nickFocusGained(java.awt.event.FocusEvent evt) {                                       
@@ -745,7 +785,8 @@ public class AdminFrame extends javax.swing.JFrame implements WindowListener {
     }                                            
 
     private void button_clearRankActionPerformed(java.awt.event.ActionEvent evt) {                                                 
-        // TODO add your handling code here:
+    	System.out.println("Clear rank button pushed");
+        player.clearRank();
     }                                                
 
     // Variables declaration - do not modify                     

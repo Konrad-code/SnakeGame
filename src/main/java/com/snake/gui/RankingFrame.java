@@ -53,6 +53,8 @@ public class RankingFrame extends javax.swing.JFrame implements WindowListener {
         	label_stop.setEnabled(false);
         	doesMusicPlay = false;
         }
+        if(player.getPlayerNickname().length() < 1)
+        	button_logout.setEnabled(false);
 
         gameIcon = new ImageIcon("img\\snake_min.png");
         setIconImage(gameIcon.getImage());
@@ -459,6 +461,7 @@ public class RankingFrame extends javax.swing.JFrame implements WindowListener {
         frame.setVisible(true);
         frame.pack();
         frame.setLocationRelativeTo(null);
+        music.stop();
         this.dispose();
     }                                             
 

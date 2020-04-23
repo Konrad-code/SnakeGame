@@ -23,14 +23,14 @@ public class Main
 {	
     public static void main(String[] args)
     {
-    	StoredProcedures preparingProceduresInDatabase = StoredProcedures.getInstance();
-    	PlayerDAO player1 = new PlayerDAO();
+//    	StoredProcedures preparingProceduresInDatabase = StoredProcedures.getInstance();
+//    	PlayerDAO player1 = new PlayerDAO();
 //    	player1.dropTable();
 //    	player1.createTable();
 //    	player1.deletePlayers();
-    	System.out.println(player1.getAllPlayers());
-    	System.out.println("\n\n");
-    	System.out.println(player1.searchPlayers("Brown"));
+//    	System.out.println(player1.getAllPlayers());
+//    	System.out.println("\n\n");
+//    	System.out.println(player1.searchPlayers("Brown"));
 //    	player1.deletePlayer("DavidDuhovny");
     	
 

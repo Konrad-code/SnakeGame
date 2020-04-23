@@ -743,6 +743,7 @@ public class RegisterFrame extends javax.swing.JFrame implements WindowListener 
        			frame.setVisible(true);
         		frame.pack();
         		frame.setLocationRelativeTo(null);
+        		music.stop();
         		this.dispose();
             }
         }

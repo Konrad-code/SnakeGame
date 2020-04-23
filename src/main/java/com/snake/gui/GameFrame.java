@@ -63,6 +63,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
     private PlayerDAO player;
     private Clip music;
     private boolean doesMusicPlay = true;
+    private int points, iloscJablek, iloscPowerupow, iloscPunktow;
 
     private ArrayList<Powerup> powerupy; //
 
@@ -87,29 +88,44 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
         addKeyListener(this);
         this.addWindowListener(this);
         this.setLocationRelativeTo(null);
+        gameIcon = new ImageIcon("img\\snake_min.png");
+    	setIconImage(gameIcon.getImage());
+    	
         random = new Random();
         snake = new ArrayList<Waz>();
         jablka = new ArrayList<Jablko>();
         powerupy = new ArrayList<Powerup>();
+        
         this.doesMusicPlay = doesMusicPlay;
         this.music = music;
         this.player = player;
-        if(!player.getGameSettings().isIfMusic())
+        System.out.println("Czekanie: " + czekanie + " | Zaciemnienie: " + zaciemnienie + " | "
+        		+ "Sciany: " + przechodzeniePrzezScany);
+        System.out.println(" | Ilosc jablek: " + iloscJablek + " | " + "Ilosc powerupow: " 
+        		+ iloscPowerupow + " | Ilosc punktow: " + iloscPunktow);
+    	czekanie = player.getGameSettings().getGameSpeed();
+    	zaciemnienie = player.getGameSettings().isIfNarrowedView();
+    	przechodzeniePrzezScany = player.getGameSettings().isIfMoveThroughWalls();
+    	iloscJablek = player.getGameSettings().getSpawnedApplesNo();
+    	iloscPowerupow = player.getGameSettings().getSpawnedPowerupsNo();
+    	iloscPunktow = player.getGameSettings().getScoreForApple();
+    	System.out.println("Czekanie: " + czekanie + " | Zaciemnienie: " + zaciemnienie + " | "
+        		+ "Sciany: " + przechodzeniePrzezScany);
+        System.out.println(" | Ilosc jablek: " + iloscJablek + " | " + "Ilosc powerupow: " 
+        		+ iloscPowerupow + " | Ilosc punktow: " + iloscPunktow);
+    	if(!player.getGameSettings().isIfMusic())
         	doesMusicPlay = false;
-
-        gameIcon = new ImageIcon("img\\snake_min.png");
-    	setIconImage(gameIcon.getImage());
+    	
     	start();
+
     }
 
-    public void paint(Graphics g)
-    {
+    public void paint(Graphics g) {
         g.clearRect(0, 0, szerokosc, szerokosc);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, szerokosc, szerokosc);
 
-        for (int i = 0; i < snake.size(); i++)
-        {
+        for (int i = 0; i < snake.size(); i++) {
             if ((i == snake.size() - 1))
                 snake.get(i).draw(g, 1600);
             else
@@ -124,16 +140,15 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
         Font font2 = new Font("Arial Black", Font.ITALIC, 10);
         Font font3 = new Font("Arial Black", Font.ITALIC, 40);
 
-        if (poIntro)
-        {
+        if (poIntro) {
             g.setFont(font);
             g.setColor(Color.GRAY);
             g.drawOval(10, 10, 10, 10);
             g.drawString(": " + (snake.size() - startSize), 25, 20);
+            points = snake.size() - startSize;
         }
 
-        if (!poIntro)
-        {
+        if (!poIntro) {
             g.setColor(Color.RED);
             g.fillRect(50, 50, 135, 15);
             g.fillRect(130, 70, 95, 15);
@@ -176,8 +191,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
 
         }
 
-        if (info)
-        {
+        if (info) {
             g.setColor(Color.RED);
             g.fillRect(7, 30, 70, 15);//X W�a
             g.fillRect(7, 50, 70, 15);//Y W�a
@@ -206,8 +220,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
             g.drawString("\" X \" -  Zwieksz predkosc weza", 10, 260);
         }
 
-        if (zaciemnienie)
-        {
+        if (zaciemnienie) {
             g.setColor(Color.DARK_GRAY);
             g.fillRect(X*10 - (szerokosc + 50), Y*10 - (wysokosc +50), szerokosc+100,wysokosc);
             g.fillRect(X*10 - (szerokosc + 50), Y*10-50, szerokosc,wysokosc+100);
@@ -215,8 +228,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
             g.fillRect(X*10 - 50, Y*10 + 50, szerokosc + 100, wysokosc);
         }
 
-        if (sciany)
-        {
+        if (sciany) {
             g.setColor(Color.BLACK);
             g.fillRect(0,0, szerokosc, 10);
             g.fillRect(0,0, 10, wysokosc);
@@ -224,8 +236,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
             g.fillRect(szerokosc - 10,0, 10, wysokosc);
         }
 
-        if (pauza)
-        {
+        if (pauza) {
             g.setFont(font3);
             g.setColor(Color.RED);
             g.fillRect(137, 153, 140, 50);
@@ -235,8 +246,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
             g.setFont(font2);
         }
 
-        if (!dalejPelza)
-        {
+        if (!dalejPelza) {
             g.setFont(font3);
             g.setColor(Color.RED);
             g.fillRect(90, 253, 235, 50);
@@ -244,39 +254,43 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
             g.drawString("Przegrales", 90, 290);
             g.setColor(Color.GRAY);
             g.setFont(font2);
+            
+            player.updatePlayerScore(points);
         }
     }
 
-    public void start()
-    {
+    public void start() {
         dalejPelza = true;
         thread = new Thread(this);
         thread.start();
     }
 
-    public void stop()
-    {
+    public void stop() {
     	dalejPelza = false;
-        try {thread.join();} catch (InterruptedException e){e.printStackTrace();}
+        try {
+//        	thread.join();
+        	System.out.println("Crashed with yourself");
+            try { Thread.sleep(4000); } catch (InterruptedException e) { /* leave action */ }
+            System.out.println("Switch to ranking");
+            RankingFrame frame = new RankingFrame(player, music, doesMusicPlay);
+            frame.setVisible(true);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+//            this.dispose();
+        } catch (Exception e){e.printStackTrace();}
     }
 
-    public void run()
-    {
-    	
-        while (dalejPelza)
-        {
-            if(!pauza && poIntro)
-            {
+    public void run() {
+        while (dalejPelza) {
+            if(!pauza && poIntro) {
                 ruchWykonany = false;
                 Waz wonsz;
-                if (snake.size() == 0)
-                {
+                if (snake.size() == 0) {
                     wonsz = new Waz(X, Y, 10);
                     snake.add(wonsz);
                 }
 
-                if(jablka.size() == 0)
-                {
+                if(jablka.size() < iloscJablek) {
                     int xJablka = random.nextInt(37)+1;
                     int yJablka = random.nextInt(37)+1;
 
@@ -284,18 +298,15 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                     jablka.add(jablko);
                 }
 
-                for(int i = 0; i < jablka.size(); i++)
-                {
-                    if(X == jablka.get(i).getX() && Y == jablka.get(i).getY())
-                    {
-                        size++;
+                for(int i = 0; i < jablka.size(); i++) {
+                    if(X == jablka.get(i).getX() && Y == jablka.get(i).getY()) {
+                        size += iloscPunktow;
                         jablka.remove(i);
                         i++;
                     }
                 }
 
-                if(powerupy.size() == 0 && moznaSpawnowac)
-                {
+                if(powerupy.size() < iloscPowerupow && moznaSpawnowac) {
                     int xPowerupa = random.nextInt(37)+1;
                     int yPowerupa = random.nextInt(37)+1;
 
@@ -303,72 +314,59 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                     powerupy.add(powerup);
                 }
 
-                for(int i = 0; i < powerupy.size(); i++)
-                {
-                    if(X == powerupy.get(i).getX() && Y == powerupy.get(i).getY())
-                    {
+                for(int i = 0; i < powerupy.size(); i++) {
+                    if(X == powerupy.get(i).getX() && Y == powerupy.get(i).getY()) {
                         int funkcja = random.nextInt(6);
 
                         if (funkcja == 0)
                             size += 10;
 
-                        if (funkcja == 1)
-                        {
+                        if (funkcja == 1) {
                             zaciemnienie = true;
                             powerup1activated = true;
                         }
 
-                        if (funkcja == 2)
-                        {
+                        if (funkcja == 2) {
                             czekanie = 40;
                             powerup2activated = true;
                         }
 
-                        if (funkcja == 3)
-                        {
+                        if (funkcja == 3) {
                             czekanie = 120;
                             powerup3activated = true;
                         }
 
-                        if (funkcja == 4)
-                        {
+                        if (funkcja == 4) {
                             przechodzeniePrzezScany = false;
                             powerup4activated = true;
                         }
 
-                        if (funkcja == 5)
-                        {
+                        if (funkcja == 5) {
                             int punktSkrocenia = snake.size()/3;
 
                             if (snake.size() - punktSkrocenia > startSize)
-                                for (int j = 0; j < punktSkrocenia + 1; j++)
-                                {
+                                for (int j = 0; j < punktSkrocenia + 1; j++) {
                                     snake.remove(0);
                                     size--;
                                 }
                         }
-
                         powerupy.remove(i);
                         i++;
                     }
                 }
 
-                for(int i =0; i < snake.size(); i++)
-                {
-                    if(X == snake.get(i).getX() && Y == snake.get(i).getY())
-                    {
+                for(int i =0; i < snake.size(); i++) {
+                    if(X == snake.get(i).getX() && Y == snake.get(i).getY()) {
                         if(i != snake.size() - 1)
                             stop();
                     }
                 }
 
-                if (powerup1activated)
-                {
+                if (powerup1activated) {
                     moznaSpawnowac = false;
                     czasPowerup1 += czekanie;
 
-                    if (czasPowerup1 >= 30000)//30 sekund
-                    {
+                    if (czasPowerup1 >= 30000) {  //30 sekund 
                         zaciemnienie = false;
                         czasPowerup1 = 0;
                         powerup1activated = false;
@@ -376,13 +374,11 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                     }
                 }
 
-                if (powerup2activated)
-                {
+                if (powerup2activated) {
                     moznaSpawnowac = false;
                     czasPowerup2 += czekanie;
 
-                    if (czasPowerup2 >= 15000)//15 sekund
-                    {
+                    if (czasPowerup2 >= 15000) {  //15 sekund
                         czekanie = 80;
                         czasPowerup2 = 0;
                         powerup2activated = false;
@@ -390,13 +386,11 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                     }
                 }
 
-                if (powerup3activated)
-                {
+                if (powerup3activated) {
                     moznaSpawnowac = false;
                     czasPowerup3 += czekanie;
 
-                    if (czasPowerup3 >= 15000)//15 sekund
-                    {
+                    if (czasPowerup3 >= 15000) { //15 sekund 
                         czekanie = 80;
                         czasPowerup3 = 0;
                         powerup3activated = false;
@@ -404,13 +398,11 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                     }
                 }
 
-                if (powerup4activated)
-                {
+                if (powerup4activated) {
                     moznaSpawnowac = false;
                     czasPowerup4 += czekanie;
 
-                    if (czasPowerup4 >= 30000)//30 sekund
-                    {
+                    if (czasPowerup4 >= 30000) {   //30 sekund
                         przechodzeniePrzezScany = true;
                         czasPowerup4 = 0;
                         powerup4activated =false;
@@ -418,8 +410,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                     }
                 }
 
-                if(przechodzeniePrzezScany)
-                {
+                if(przechodzeniePrzezScany) {
                     sciany = false;
 
                     if (X < 0)
@@ -431,8 +422,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                     if (Y > 39)
                         Y = 0;
                 }
-                else
-                {
+                else {
                     sciany = true;
 
                     if (X < 0 || X > 39 || Y < 0 || Y > 39)
@@ -448,15 +438,13 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
                 if(dol)
                     Y++;
 
-
-
-
                 wonsz = new Waz(X, Y, 10);
                 snake.add(wonsz);
 
                 if(snake.size() > size)
                     snake.remove(0);
             }
+//            System.out.println("Frequency of game speed");
             try {Thread.sleep(czekanie);} catch (Exception ignored) {}
             repaint();
         }

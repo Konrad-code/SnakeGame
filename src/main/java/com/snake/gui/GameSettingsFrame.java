@@ -5,6 +5,8 @@ package com.snake.gui;
 **/
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.sound.sampled.Clip;
@@ -47,6 +49,8 @@ public class GameSettingsFrame extends javax.swing.JFrame implements WindowListe
         }
         if(player.isIfPlayerRoot())
         	button_adminMenu.setEnabled(true);
+        if(player.getPlayerNickname().length() < 1)
+        	button_logout.setEnabled(false);
 
         gameIcon = new ImageIcon("img\\snake_min.png");
         setIconImage(gameIcon.getImage());
@@ -527,6 +531,16 @@ public class GameSettingsFrame extends javax.swing.JFrame implements WindowListe
         );
 
         lab_iconSnake.setIcon(new ImageIcon(getClass().getResource("/snake_min.png")));
+        lab_iconSnake.addMouseListener(new MouseAdapter() {  
+            public void mouseClicked(MouseEvent e) {  
+            	System.out.println("Magic snake moves you to Login menu");
+                LoginFrame frame = new LoginFrame(player, music, doesMusicPlay);
+                frame.setVisible(true);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                dispose();
+            }  
+        }); 
         label_stop.setIcon(new ImageIcon(getClass().getResource("/stop.png")));
         label_play.setIcon(new ImageIcon(getClass().getResource("/play.png")));
         
@@ -636,6 +650,7 @@ public class GameSettingsFrame extends javax.swing.JFrame implements WindowListe
         frame.setVisible(true);
         frame.pack();
         frame.setLocationRelativeTo(null);
+        music.stop();
         this.dispose();
     }                                             
 
@@ -736,8 +751,10 @@ public class GameSettingsFrame extends javax.swing.JFrame implements WindowListe
         	player.getGameSettings().setIfNarrowedView(false);
         if(radioButton_musicOn.isSelected())
         	player.getGameSettings().setIfMusic(true);
-        else
+        else {
         	player.getGameSettings().setIfMusic(false);
+        	doesMusicPlay = false;
+        }
         if(radioButton_wallsOn.isSelected())
         	player.getGameSettings().setIfMoveThroughWalls(true);
         else
@@ -766,10 +783,20 @@ public class GameSettingsFrame extends javax.swing.JFrame implements WindowListe
 
     private void radioButton_musicOnActionPerformed(java.awt.event.ActionEvent evt) {
     	System.out.println("Radio button activating music pushed");
+    	player.getGameSettings().setIfMusic(true);
+    	if(doesMusicPlay && !music.isRunning())
+    		music.start();
+    	label_play.setEnabled(true);
+    	label_stop.setEnabled(true);
     }                                                   
 
     private void radioButton_musicOffActionPerformed(java.awt.event.ActionEvent evt) {
     	System.out.println("Radio button deactivating music pushed");
+    	player.getGameSettings().setIfMusic(false);
+    	if(music.isRunning())
+    		music.stop();
+    	label_play.setEnabled(false);
+    	label_stop.setEnabled(false);
     }                                                    
 
     private void radioButton_eclipseOnActionPerformed(java.awt.event.ActionEvent evt) {
