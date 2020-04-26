@@ -31,7 +31,7 @@ public class StoredProcedures extends ConnectDatabase implements IInsert, ISelec
 		this.deletePlayer("just overloading initializer method");
 		this.deletePlayers();
 		this.updatePlayerScore(0);
-//		this.editPlayer();
+//		this.editPlayer();		// FUNCTIONALLITY FOR FURTHER DEVELOPMENT
 		this.clearRank();
 		this.showRank();
 		this.checkLogin("just overloading initializer method");

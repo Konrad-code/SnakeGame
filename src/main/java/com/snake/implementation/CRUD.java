@@ -76,7 +76,7 @@ public abstract class CRUD extends ConnectDatabase implements IInsert, ISelect, 
 		boolean nickFree = false;
 		
 		try {
-			checkNickStatement = connection.prepareStatement("SELECT nick FROM players WHERE nick=?;");
+			checkNickStatement = connection.prepareStatement("SELECT nick FROM customer WHERE nick=?;");
 			checkNickStatement.setString(1, nick);
 			System.out.println("Executing query `checknick`('" + nick + "')");
 			rs = checkNickStatement.executeQuery();
