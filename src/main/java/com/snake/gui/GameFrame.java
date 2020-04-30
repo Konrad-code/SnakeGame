@@ -255,6 +255,7 @@ public class GameFrame  extends javax.swing.JFrame implements WindowListener, Ru
             g.setColor(Color.GRAY);
             g.setFont(font2);
             
+            player.setPlayerHighestScore(player.getHighscore(player.getPlayerNickname()));
             player.updatePlayerScore(points);
         }
     }

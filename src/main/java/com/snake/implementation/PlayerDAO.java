@@ -175,6 +175,30 @@ public class PlayerDAO extends CRUD implements IPlayerDAO {
 	}
 	
 	@Override
+	public int getHighscore(String nickname) {
+		int highscore = 0;
+		PreparedStatement searchStatement = null;
+		ResultSet result = null;
+		loadConnection();
+		
+		try {
+			searchStatement = connection.prepareStatement("SELECT score FROM players WHERE nick=?");
+			searchStatement.setString(1, nickname);
+			result = searchStatement.executeQuery();
+			if(result.next()) {
+				highscore = result.getInt("score");
+			}
+		} catch (SQLException e) {
+			System.err.println("Failed to carry `searchPlayers` method: " + e.getMessage());
+		} finally {
+			try { result.close(); } catch (Exception e) { /* leave action */ }
+			try { searchStatement.close(); } catch (Exception e) { /* leave action */ }
+			closeConnection();
+		}
+		return highscore;
+	}
+	
+	@Override
 	public void updatePlayerScore(int newScore) {
 		if(newScore > playerHighestScore)
 			if(playerNickname.length() > 0) {

@@ -11,4 +11,5 @@ import com.snake.implementation.Player;
 public interface IPlayerDAO {
 	public List<Player> getAllPlayers();
 	public List<Player> searchPlayers(String nickname);
+	public int getHighscore(String nickname);
 }
