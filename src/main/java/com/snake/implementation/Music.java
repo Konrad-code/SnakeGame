@@ -14,7 +14,7 @@ public class Music {
     public Clip playMusic(){
         Clip music = null;
         try{
-            File musicFile = new File("C:\\Users\\mHm_MaXi\\Documents\\NetBeansProjects\\Nauka\\src\\music\\nocnyKochanekWaz.wav");
+            File musicFile = new File("music\\nocnyKochanekWaz.wav");
             if(musicFile.exists()){
                 AudioInputStream audio = AudioSystem.getAudioInputStream(musicFile);
                 music = AudioSystem.getClip();

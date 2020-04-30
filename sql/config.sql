@@ -1,12 +1,12 @@
 CREATE TABLE public.players
 (
-    id_player integer SERIAL PRIMARY KEY,
+    id_player SERIAL PRIMARY KEY,
     nick character varying(64) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     login character varying(64) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     password character varying(64) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     score integer DEFAULT 0,
     root boolean DEFAULT false
-)
+);
 
 INSERT INTO players (nick, login, password, score, root) VALUES ('Doe','JohnDo','1234qwer', 25, FALSE);
 INSERT INTO players (nick, login, password, score, root) VALUES ('SeriousGuy','Mary69', 'wwadww211s', 38, FALSE);

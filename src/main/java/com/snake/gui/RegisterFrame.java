@@ -714,7 +714,7 @@ public class RegisterFrame extends javax.swing.JFrame implements WindowListener 
         
         boolean ifCorrect = verifyData(usernameProvided, nicknameProvided, passwordProvided, passwordConfirmationProvided);
         if(ifCorrect)
-            playerToRegister = new Player(usernameProvided, nicknameProvided, passwordProvided);
+            playerToRegister = new Player(nicknameProvided, usernameProvided, passwordProvided);
         return playerToRegister;
     }
     
@@ -728,24 +728,27 @@ public class RegisterFrame extends javax.swing.JFrame implements WindowListener 
                          + "\nUsername: " + newPlayerToRegister.getLogin() + "\nNickname: " + newPlayerToRegister.getNickname());
             System.out.println(message);
 
-            if(player.checkNick(newPlayerToRegister.getNickname()))
+            if(player.checkNick(newPlayerToRegister.getNickname())) {
                 isFree = true;
-            else
+                if(!(isFree && player.checkLogin(newPlayerToRegister.getLogin()))){
+                    isFree = false;
+                    JOptionPane.showMessageDialog(null, "Username occupied. Provide other username");
+                }
+                if(isFree){
+                    player.addPlayer(newPlayerToRegister);
+                    JOptionPane.showMessageDialog(null, "New user created successfully!\n" + message);
+                    LoginFrame frame = new LoginFrame(player, music, doesMusicPlay);
+           			frame.setVisible(true);
+            		frame.pack();
+            		frame.setLocationRelativeTo(null);
+//            		music.stop();
+            		this.dispose();
+                }
+            } else
                 JOptionPane.showMessageDialog(null, "Nickname occupied. Provide other nickname");
-            if(!(isFree && player.checkLogin(newPlayerToRegister.getLogin()))){
-                isFree = false;
-                JOptionPane.showMessageDialog(null, "Username occupied. Provide other username");
-            }
-            if(isFree){
-                player.addPlayer(newPlayerToRegister);
-                JOptionPane.showMessageDialog(null, "New user created successfully!\n" + message);
-                LoginFrame frame = new LoginFrame(player, music, doesMusicPlay);
-       			frame.setVisible(true);
-        		frame.pack();
-        		frame.setLocationRelativeTo(null);
-        		music.stop();
-        		this.dispose();
-            }
+        } else {
+        	System.out.println("Entered data empty or fatal error occured. Provided NewPlayer is null");
+        	JOptionPane.showMessageDialog(null, "Entered data empty or fatal error occured. Provided NewPlayer is null");
         }
     }                                               
 
