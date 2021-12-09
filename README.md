@@ -1,5 +1,6 @@
 # SnakeGame
 Read before using and testing this application.
+Snake game GUI application - project has been developed with partial usage of pair programming technique and is implementing full CRUD functionality for registering and login players with separate admin privileges and menu. Players are allowed to ranking panel, just play game or enter game settings panel for customization. This includes switching “walls”, “eclipse” or “music” and also setting parameters such as: apples spawn rate, powerups spawn rate, number of apples and number of powerups. Logged player can establish new high score. Admin manages players’ accounts and has full access from app to build database structure in case of remote app maintenance after database collapse (portability) and load stored commands responsible for CRUD which are raising security.
 
 ************** POLISH EDITION ******************
 
@@ -23,12 +24,3 @@ Maven, Swing oraz z wykorzystaniem polaczenia z baza danych JDBC na platformie P
 
 KONFIGURACJA (plik "README") ORAZ ZRZUTY EKRANU PREZENTUJĄCE EKRANY GRAFICZNE Z APLIKACJI
 ZNAJDUJĄ SIĘ W FOLDERZE "README".
-
-
-
-
-
-
-
-
-
